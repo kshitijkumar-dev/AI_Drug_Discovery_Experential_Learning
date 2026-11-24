@@ -501,6 +501,10 @@
   .facts { display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:1rem; }
   .fact { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:0.6rem 1rem; font-size:0.78rem; color:var(--muted); }
   .fact b { color:var(--text); font-family:var(--mono); font-size:1rem; display:block; }
+  .lib-title { font-family:var(--mono); font-size:0.72rem; color:var(--accent); margin:1rem 0 0.5rem; letter-spacing:1px; }
+  .chips { display:flex; flex-wrap:wrap; gap:0.45rem; }
+  .chip { background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:var(--sans); font-size:0.78rem; padding:0.3rem 0.7rem; border-radius:20px; cursor:pointer; transition:all 0.2s; }
+  .chip:hover { border-color:var(--accent); color:var(--accent); }
   .lim-list p b { color:var(--text); }
   .refs { font-size:0.8rem; color:var(--muted); line-height:1.7; padding-left:1.2rem; }
   .refs li { margin-bottom:0.5rem; }
@@ -700,14 +704,14 @@
 <section id="admet">
   <div class="section-label reveal">07 · PRECLINICAL PREDICTION</div>
   <h2 class="section-title reveal">ADMET Predictor</h2>
-  <p class="section-desc reveal">AI is also used to predict properties before preclinical tests. Enter a drug name to see its Absorption, Distribution, Metabolism, Excretion and Toxicity profile.</p>
+  <p class="section-desc reveal">AI is also used to predict properties before preclinical tests. Choose from 56 common medicines and 20 antibiotics to see the Absorption, Distribution, Metabolism, Excretion and Toxicity profile.</p>
   <div class="tool-wrapper reveal">
     <div class="tool-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:0.5rem;">admet_predictor.py</span></div>
     <div class="tool-body">
-      <div class="warn-box">⚠ Illustrative predictions for educational purposes only. Not for clinical use.</div>
+      <div class="warn-box">⚠ Typical textbook values, approximate and for education only. Not for clinical use.</div>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;align-items:flex-end;">
         <div style="flex:1;min-width:220px;"><label>MOLECULE / DRUG NAME</label>
-          <input type="text" id="admet-input" placeholder="e.g. Aspirin, Ibuprofen, Caffeine, Metformin, Paracetamol" onkeydown="if(event.key==='Enter')runADMET()"/></div>
+          <input type="text" id="admet-input" list="drug-list" placeholder="Type a drug name, e.g. Paracetamol, Amoxicillin" onkeydown="if(event.key==='Enter')runADMET()"/></div>
         <button class="btn btn-purple" id="admet-btn" onclick="runADMET()">🔍 Predict ADMET</button>
       </div>
       <div id="admet-result" class="result-panel">
@@ -716,6 +720,12 @@
         <div id="admet-summary" style="margin-top:1.2rem;font-size:0.85rem;color:var(--muted);line-height:1.7;"></div>
       </div>
     </div>
+  </div>
+  <div class="card reveal" style="margin-top:1.5rem;">
+    <h3 style="font-family:var(--serif);font-size:1.25rem;margin-bottom:0.3rem;">Drug Library</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">Click any drug to see its ADMET profile.</p>
+    <div class="lib-title">Common medicines (<span id="cnt-meds"></span>)</div><div class="chips" id="chips-meds"></div>
+    <div class="lib-title">Antibiotics (<span id="cnt-abx"></span>)</div><div class="chips" id="chips-abx"></div>
   </div>
 </section>
 
@@ -1035,21 +1045,146 @@ function runDocking(){
 
 
 // ═══ ADMET (live AI if available, built-in examples otherwise) ═══
-const admetLocal = {
-  aspirin:{molecule:'Aspirin',formula:'C₉H₈O₄',mw:'180.16 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.15 L/kg','good'],['⚙️','METABOLISM','Hydrolysed to salicylate; CYP2C9','ok'],['🚽','EXCRETION','t½ ≈ 2–3 h, renal','good'],['☠️','TOXICITY','Low at normal dose; GI irritation','ok'],['💧','SOLUBILITY','≈ 3 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 68%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Small, well-absorbed and rapidly cleared. Main weakness is stomach irritation, so it passes drug-likeness filters but still shows a side-effect trade-off.'},
-  ibuprofen:{molecule:'Ibuprofen',formula:'C₁₃H₁₈O₂',mw:'206.28 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.12 L/kg; highly protein-bound','ok'],['⚙️','METABOLISM','CYP2C9 substrate','ok'],['🚽','EXCRETION','t½ ≈ 2 h, renal','good'],['☠️','TOXICITY','Low; GI and kidney risk at high dose','ok'],['💧','SOLUBILITY','Low (≈ 21 mg/L)','ok'],['🧬','BIOAVAILABILITY','≈ 80–100%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Excellent oral absorption and a short half-life. Low water solubility is the main drawback; it passes all Lipinski rules.'},
-  caffeine:{molecule:'Caffeine',formula:'C₈H₁₀N₄O₂',mw:'194.19 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Crosses blood–brain barrier','ok'],['⚙️','METABOLISM','CYP1A2 substrate','good'],['🚽','EXCRETION','t½ ≈ 5 h, renal','good'],['☠️','TOXICITY','Low; stimulant effects at high dose','ok'],['💧','SOLUBILITY','≈ 21 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 100%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Almost fully absorbed and passes into the brain, which explains its stimulant action. Strong drug-like profile.'},
-  metformin:{molecule:'Metformin',formula:'C₄H₁₁N₅',mw:'129.16 Da',properties:[['🫀','ABSORPTION','Medium','ok'],['🩸','DISTRIBUTION','Vd ≈ 3 L/kg; not protein-bound','good'],['⚙️','METABOLISM','Not metabolised','good'],['🚽','EXCRETION','t½ ≈ 6 h, unchanged in urine','good'],['☠️','TOXICITY','Low; rare lactic acidosis','ok'],['💧','SOLUBILITY','Very high','good'],['🧬','BIOAVAILABILITY','≈ 50–60%','ok'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Very soluble and excreted unchanged, so few drug interactions. Moderate absorption; a rare serious risk (lactic acidosis) is monitored in kidney disease.'},
-  paracetamol:{molecule:'Paracetamol (Acetaminophen)',formula:'C₈H₉NO₂',mw:'151.16 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.9 L/kg','good'],['⚙️','METABOLISM','Liver (glucuronidation; CYP2E1)','ok'],['🚽','EXCRETION','t½ ≈ 2 h, renal','good'],['☠️','TOXICITY','Liver injury in overdose','bad'],['💧','SOLUBILITY','≈ 14 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 85%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Well absorbed and cleared, but overdose can overload liver metabolism and cause liver damage — a good example of a toxicity filter.'}
-};
-admetLocal.acetaminophen = admetLocal.paracetamol;
+// ═══ ADMET built-in library: 56 common medicines + 20 antibiotics (typical textbook values, approximate) ═══
+const sub = s => s.replace(/\d+/g, d => d.split('').map(c => '₀₁₂₃₄₅₆₇₈₉'[c]).join(''));
+const medRows = [
+["Paracetamol","acetaminophen,dolo,crocin,calpol","C8H9NO2","151.16 Da","Analgesic / antipyretic","85","Vd ≈ 0.9 L/kg","Liver: glucuronidation, CYP2E1","2","renal","Liver injury in overdose","bad","≈ 14 mg/mL","Pass"],
+["Aspirin","ecosprin,disprin","C9H8O4","180.16 Da","NSAID / antiplatelet","68","Vd ≈ 0.15 L/kg","Hydrolysed to salicylate in liver","2–3","renal","GI irritation and bleeding risk","ok","≈ 3 mg/mL","Pass"],
+["Ibuprofen","brufen,advil","C13H18O2","206.28 Da","NSAID","80–100","Vd ≈ 0.12 L/kg; 99% protein-bound","CYP2C9","2","renal","GI and kidney risk at high dose","ok","Low (≈ 21 mg/L)","Pass"],
+["Diclofenac","voveran","C14H11Cl2NO2","296.15 Da","NSAID","50","Vd ≈ 0.17 L/kg; >99% protein-bound","CYP2C9 and glucuronidation","2","renal and bile","GI, liver and heart risk","ok","Low","Pass"],
+["Naproxen","naprosyn","C14H14O3","230.26 Da","NSAID","95","Vd ≈ 0.16 L/kg; >99% protein-bound","CYP2C9 / CYP1A2","12–17","renal","GI and heart risk","ok","Low","Pass"],
+["Metformin","glycomet","C4H11N5","129.16 Da","Antidiabetic (biguanide)","50–60","Vd ≈ 3 L/kg; not protein-bound","Not metabolised","6","renal (unchanged)","Rare lactic acidosis","ok","Very high","Pass"],
+["Atorvastatin","lipitor,atorva","C33H35FN2O5","558.64 Da","Statin (cholesterol)","14","Vd ≈ 381 L; >98% protein-bound","CYP3A4","14","bile","Muscle pain, liver enzyme rise","ok","Low","Fail (MW > 500)"],
+["Simvastatin","zocor","C25H38O5","418.57 Da","Statin (cholesterol)","5","Highly protein-bound (>95%)","CYP3A4 (prodrug)","2–3","faeces","Muscle injury; many drug interactions","ok","Very low","Pass"],
+["Rosuvastatin","crestor","C22H28FN3O6S","481.54 Da","Statin (cholesterol)","20","Vd ≈ 134 L; 90% protein-bound","Minimal (CYP2C9)","19","faeces","Muscle pain; rare rhabdomyolysis","ok","Moderate","Borderline"],
+["Amlodipine","amlong,norvasc","C20H25ClN2O5","408.88 Da","Calcium channel blocker (BP)","60–65","Vd ≈ 21 L/kg; 97% protein-bound","CYP3A4","30–50","renal","Ankle swelling; low serious toxicity","ok","Low","Pass"],
+["Atenolol","tenormin","C14H22N2O3","266.34 Da","Beta blocker","50","Vd ≈ 0.7 L/kg; low protein binding","Minimal","6–7","renal","Slow heart rate, tiredness","ok","Moderate","Pass"],
+["Metoprolol","metolar,lopressor","C15H25NO3","267.36 Da","Beta blocker","50","Vd ≈ 4 L/kg","CYP2D6","3–7","renal","Slow heart rate, tiredness","ok","Very high","Pass"],
+["Losartan","losar,cozaar","C22H23ClN6O","422.91 Da","ARB (blood pressure)","33","Vd ≈ 34 L; 99% protein-bound","CYP2C9 / CYP3A4 to active form","2","bile and renal","Harms a fetus; high potassium","ok","Moderate","Pass"],
+["Lisinopril","listril,zestril","C21H31N3O5","405.49 Da","ACE inhibitor","25","Not protein-bound","Not metabolised","12","renal (unchanged)","Dry cough; rare angioedema","ok","High","Pass"],
+["Enalapril","envas,vasotec","C20H28N2O5","376.45 Da","ACE inhibitor","60","Prodrug turned into enalaprilat","Liver esterases (prodrug)","11","renal","Dry cough; rare angioedema","ok","High","Pass"],
+["Omeprazole","omez,prilosec","C17H19N3O3S","345.42 Da","Proton pump inhibitor","35–60","Vd ≈ 0.3 L/kg; 95% protein-bound","CYP2C19 / CYP3A4","0.5–1","renal","Low; long use may lower B12 and magnesium","ok","Low","Pass"],
+["Pantoprazole","pan 40,pantop,protonix","C16H15F2N3O4S","383.37 Da","Proton pump inhibitor","77","Vd ≈ 0.15 L/kg; 98% protein-bound","CYP2C19","1","renal","Low; long use may lower magnesium","good","Low","Pass"],
+["Famotidine","famocid,pepcid","C8H15N7O2S2","337.45 Da","H2 blocker (acid)","40–45","Vd ≈ 1.1 L/kg; low protein binding","Minimal","2.5–3.5","renal","Low","good","Moderate","Pass"],
+["Cetirizine","zyrtec,cetzine","C21H25ClN2O3","388.89 Da","Antihistamine","70","Vd ≈ 0.5 L/kg; 93% protein-bound","Minimal","8","renal","Mild drowsiness","ok","Moderate","Pass"],
+["Loratadine","claritin,lorfast","C22H23ClN2O2","382.88 Da","Antihistamine","40","97% protein-bound","CYP3A4 / CYP2D6 to desloratadine","8","renal and faeces","Low; little drowsiness","good","Low","Pass"],
+["Salbutamol","albuterol,asthalin,ventolin","C13H21NO3","239.31 Da","Bronchodilator (asthma)","50","Low protein binding (~10%)","Liver sulfation","4–6","renal","Tremor, fast heartbeat","ok","Moderate","Pass"],
+["Montelukast","montair,singulair","C35H36ClNO3S","586.18 Da","Leukotriene blocker (asthma)","64","Vd ≈ 0.15 L/kg; >99% protein-bound","CYP3A4 / CYP2C8","5","bile","Rare mood and sleep changes","ok","Very low","Fail (MW > 500)"],
+["Prednisolone","wysolone,deltacortril","C21H28O5","360.44 Da","Corticosteroid","80","Vd ≈ 0.4 L/kg; dose-dependent binding","Liver","2–4","renal","Long use: weight gain, bone loss, high sugar","ok","Low","Pass"],
+["Dexamethasone","dexona,decadron","C22H29FO5","392.46 Da","Corticosteroid","80–90","Vd ≈ 0.8 L/kg; 77% protein-bound","CYP3A4","3–4","renal","Long use: high sugar, infection risk","ok","Low","Pass"],
+["Levothyroxine","thyronorm,eltroxin","C15H11I4NO4","776.87 Da","Thyroid hormone","60–80",">99% protein-bound","Deiodination in liver and tissues","6–7 days","renal and faeces","Overdose causes hyperthyroid symptoms","ok","Very low","Fail (MW > 500)"],
+["Glimepiride","amaryl,glimisave","C24H34N4O5S","490.62 Da","Sulfonylurea (diabetes)","100","Vd ≈ 0.1 L/kg; >99% protein-bound","CYP2C9","5–8","renal and faeces","Low blood sugar (hypoglycaemia)","ok","Low","Pass"],
+["Sitagliptin","januvia","C16H15F6N5O","407.31 Da","DPP-4 inhibitor (diabetes)","87","Vd ≈ 198 L; 38% protein-bound","Minimal","12","renal (unchanged)","Low; rare pancreatitis","good","High (as salt)","Pass"],
+["Pioglitazone","pioz,actos","C19H20N2O3S","356.44 Da","Thiazolidinedione (diabetes)","80","Vd ≈ 0.6 L/kg; >99% protein-bound","CYP2C8","3–7","bile","Fluid retention; heart failure risk","ok","Very low","Pass"],
+["Warfarin","warf,coumadin","C19H16O4","308.33 Da","Anticoagulant","100","Vd ≈ 0.14 L/kg; 99% protein-bound","CYP2C9","40","renal (metabolites)","Bleeding; narrow therapeutic range","bad","Low","Pass"],
+["Clopidogrel","plavix,clopitab","C16H16ClNO2S","321.82 Da","Antiplatelet","50","98% protein-bound","Prodrug activated by CYP2C19","6","renal and faeces","Bleeding risk","ok","Low","Pass"],
+["Furosemide","lasix","C12H11ClN2O5S","330.74 Da","Loop diuretic","60","Vd ≈ 0.1 L/kg; 98% protein-bound","Minimal glucuronidation","2","renal","Dehydration, low potassium","ok","Low","Pass"],
+["Hydrochlorothiazide","hctz,aquazide","C7H8ClN3O4S2","297.74 Da","Thiazide diuretic","70","Vd ≈ 3 L/kg","Not metabolised","6–15","renal (unchanged)","Low potassium and sodium","ok","Low","Pass"],
+["Spironolactone","aldactone","C24H32O4S","416.57 Da","Potassium-sparing diuretic","70",">90% protein-bound","Liver to active metabolites","1.4","renal and bile","High potassium","ok","Very low","Pass"],
+["Digoxin","lanoxin","C41H64O14","780.94 Da","Cardiac glycoside","70–80","Vd ≈ 7 L/kg","Minimal","36–48","renal","Narrow therapeutic range; toxic at slightly high levels","bad","Low","Fail (MW > 500)"],
+["Diazepam","valium,calmpose","C16H13ClN2O","284.74 Da","Benzodiazepine","100","Vd ≈ 1.1 L/kg; 98% protein-bound","CYP2C19 / CYP3A4","20–100","renal","Sedation, dependence","ok","Low","Pass"],
+["Alprazolam","alprax,xanax","C17H13ClN4","308.76 Da","Benzodiazepine","90","Vd ≈ 1 L/kg; 80% protein-bound","CYP3A4","11","renal","Sedation, dependence","ok","Low","Pass"],
+["Sertraline","zoloft,serta","C17H17Cl2N","306.23 Da","SSRI antidepressant","44","Vd ≈ 20 L/kg; 98% protein-bound","Liver (CYP2B6 and others)","26","renal and faeces","Nausea; rare serotonin syndrome","ok","Low","Pass"],
+["Fluoxetine","prozac,fludac","C17H18F3NO","309.33 Da","SSRI antidepressant","72","Vd ≈ 20–45 L/kg; 95% protein-bound","CYP2D6","1–3 days","renal","Nausea; interacts with many drugs","ok","Low","Pass"],
+["Amitriptyline","tryptomer,elavil","C20H23N","277.40 Da","Tricyclic antidepressant","45","Vd ≈ 15 L/kg; 95% protein-bound","CYP2D6 / CYP2C19","10–28","renal","Dangerous heart effects in overdose","bad","Low","Pass"],
+["Carbamazepine","tegretol,zen","C15H12N2O","236.27 Da","Anticonvulsant","75–85","Vd ≈ 1 L/kg; 75% protein-bound","CYP3A4 (induces its own breakdown)","12–17","renal","Rash; many drug interactions","ok","Low","Pass"],
+["Phenytoin","eptoin,dilantin","C15H12N2O2","252.27 Da","Anticonvulsant","90","Vd ≈ 0.6 L/kg; 90% protein-bound","CYP2C9 / CYP2C19 (saturable)","22","renal (metabolites)","Narrow therapeutic range","bad","Very low","Pass"],
+["Valproic acid","valparin,depakote,sodium valproate","C8H16O2","144.21 Da","Anticonvulsant","100","Vd ≈ 0.15 L/kg; 90% protein-bound","Liver glucuronidation","9–16","renal","Liver injury; birth defects","bad","Moderate","Pass"],
+["Levetiracetam","levipil,keppra","C8H14N2O2","170.21 Da","Anticonvulsant","100","Vd ≈ 0.6 L/kg; <10% protein-bound","Minimal (enzymatic hydrolysis)","7","renal (unchanged)","Mood changes, drowsiness","ok","Very high","Pass"],
+["Gabapentin","gabapin,neurontin","C9H17NO2","171.24 Da","Anticonvulsant / nerve pain","60","Vd ≈ 0.8 L/kg; not protein-bound","Not metabolised","5–7","renal (unchanged)","Dizziness, drowsiness","ok","High","Pass"],
+["Tramadol","ultracet,ultram","C16H25NO2","263.38 Da","Opioid analgesic","75","Vd ≈ 2.7 L/kg; 20% protein-bound","CYP2D6 / CYP3A4","6","renal","Seizure risk; dependence","ok","High (as salt)","Pass"],
+["Morphine","ms contin","C17H19NO3","285.34 Da","Opioid analgesic","25–30","Vd ≈ 3–4 L/kg; 35% protein-bound","Liver glucuronidation","2–3","renal","Breathing depression; dependence","bad","Moderate","Pass"],
+["Ondansetron","emeset,zofran","C18H19N3O","293.37 Da","Anti-nausea (5-HT3 blocker)","60","Vd ≈ 2 L/kg; 75% protein-bound","CYP3A4 / CYP1A2","3–4","renal (metabolites)","QT prolongation at high dose","ok","Moderate (as salt)","Pass"],
+["Domperidone","domstal,motilium","C22H24ClN5O2","425.91 Da","Anti-nausea (D2 blocker)","15","91% protein-bound","CYP3A4","7–9","faeces and renal","QT prolongation","ok","Very low","Pass"],
+["Sildenafil","viagra,manforce","C22H30N6O4S","474.58 Da","PDE5 inhibitor","40","Vd ≈ 105 L; 96% protein-bound","CYP3A4","4","faeces","Headache, flushing; dangerous with nitrates","ok","Low","Pass"],
+["Allopurinol","zyloric,zyloprim","C5H4N4O","136.11 Da","Gout (xanthine oxidase inhibitor)","80–90","Vd ≈ 0.6 L/kg; not protein-bound","Converted to oxypurinol","1–2 h (active form ≈ 15 h)","renal","Rare severe skin reactions","ok","Low","Pass"],
+["Caffeine","","C8H10N4O2","194.19 Da","CNS stimulant","100","Vd ≈ 0.6 L/kg; crosses blood–brain barrier","CYP1A2","5","renal","Low; jitters and insomnia at high dose","good","≈ 21 mg/mL","Pass"],
+["Tamsulosin","urimax,flomax","C20H28N2O5S","408.51 Da","Alpha blocker (prostate)","90","Vd ≈ 0.2 L/kg; 99% protein-bound","CYP3A4 / CYP2D6","9–15","renal and faeces","Low blood pressure on standing","ok","Low","Pass"],
+["Hydroxychloroquine","hcq,hcqs,plaquenil","C18H26ClN3O","335.87 Da","Antimalarial / antirheumatic","70","Large Vd; accumulates in tissues","CYP2D6 / CYP3A4 / CYP2C8","40 days","renal","Retina damage with long use","ok","Moderate (as sulfate)","Pass"],
+["Fluconazole","forcan,diflucan","C13H12F2N6O","306.27 Da","Antifungal","90","Vd ≈ 0.7 L/kg; 12% protein-bound","Minimal","30","renal (unchanged)","Liver enzyme rise; QT risk","ok","Moderate","Pass"],
+["Acyclovir","aciclovir,zovirax","C8H11N5O3","225.20 Da","Antiviral","15–30","Vd ≈ 0.7 L/kg; low protein binding","Minimal","3","renal","Kidney effects at high IV dose","good","Moderate","Pass"],
+["Oseltamivir","tamiflu,fluvir","C16H28N2O4","312.40 Da","Antiviral (influenza)","75","Prodrug turned into oseltamivir carboxylate","Liver esterases (prodrug)","6–10","renal","Nausea, vomiting","good","High (as phosphate)","Pass"]
+];
+const abxRows = [
+["Amoxicillin","mox,amoxil","C16H19N3O5S","365.40 Da","Penicillin (beta-lactam)","90","Vd ≈ 0.3 L/kg; 20% protein-bound","Minimal","1","renal (unchanged)","Allergy (rash, anaphylaxis); diarrhoea","ok","≈ 4 mg/mL","Pass"],
+["Cephalexin","keflex,sporidex","C16H17N3O4S","347.39 Da","Cephalosporin (1st gen)","90","Vd ≈ 0.3 L/kg; low protein binding","Not metabolised","1","renal (unchanged)","Allergy; diarrhoea","ok","Moderate","Pass"],
+["Cefixime","taxim-o,suprax","C16H15N5O7S2","453.45 Da","Cephalosporin (3rd gen)","40–50","Vd ≈ 0.3 L/kg; 65% protein-bound","Minimal","3–4","renal and bile","Allergy; diarrhoea","ok","Low","Pass"],
+["Ceftriaxone","monocef,rocephin","C18H18N8O7S3","554.58 Da","Cephalosporin (3rd gen), injection","IV","Vd ≈ 0.12 L/kg; 85–95% protein-bound","Minimal","6–9","renal and bile","Allergy; biliary sludge","ok","Moderate (as sodium salt)","Fail (MW > 500)"],
+["Azithromycin","azithral,zithromax","C38H72N2O12","748.98 Da","Macrolide","37","Vd ≈ 31 L/kg; accumulates in tissues","Minimal (liver)","68","bile","Nausea; rare QT prolongation","ok","Low","Fail (MW > 500)"],
+["Clarithromycin","claribid,biaxin","C38H69NO13","747.95 Da","Macrolide","50","Vd ≈ 3–4 L/kg; 70% protein-bound","CYP3A4 (also inhibits it)","3–7","renal and faeces","Many drug interactions; QT prolongation","ok","Very low","Fail (MW > 500)"],
+["Doxycycline","doxy,vibramycin","C22H24N2O8","444.44 Da","Tetracycline","90–100","Vd ≈ 0.7 L/kg; 80–90% protein-bound","Minimal","18–22","renal and faeces","Sun sensitivity; food-pipe irritation","ok","Low","Pass"],
+["Ciprofloxacin","cipro,ciplox","C17H18FN3O3","331.34 Da","Fluoroquinolone","70","Vd ≈ 2–3 L/kg; 20–40% protein-bound","Partly liver; inhibits CYP1A2","4","renal","Tendon damage; nerve effects; QT","ok","Low","Pass"],
+["Levofloxacin","levoflox,levaquin","C18H20FN3O4","361.37 Da","Fluoroquinolone","99","Vd ≈ 1.1 L/kg; 24–38% protein-bound","Minimal","6–8","renal (unchanged)","Tendon damage; nerve effects","ok","Moderate","Pass"],
+["Moxifloxacin","moxif,avelox","C21H24FN3O4","401.43 Da","Fluoroquinolone","90","Vd ≈ 2 L/kg; 30–50% protein-bound","Liver glucuronidation and sulfation","12","bile and renal","QT prolongation; tendon damage","ok","Moderate (as HCl)","Pass"],
+["Metronidazole","flagyl,metrogyl","C6H9N3O3","171.15 Da","Nitroimidazole","100","Vd ≈ 0.7 L/kg; <20% protein-bound","Liver oxidation","8","renal","Metallic taste; nerve effects with long use; avoid alcohol","ok","≈ 10 mg/mL","Pass"],
+["Nitrofurantoin","macrobid,niftran","C8H6N4O5","238.16 Da","Urinary antibiotic","87","Low blood levels; concentrates in urine","Rapid liver and tissue","0.5–1","renal","Lung and nerve reactions with long use","ok","Low","Pass"],
+["Trimethoprim","tmp,trimpex","C14H18N4O3","290.32 Da","Folate-pathway inhibitor","90–100","Vd ≈ 1.6 L/kg; 44% protein-bound","Minimal","8–10","renal","High potassium; rash","ok","Low","Pass"],
+["Sulfamethoxazole","smx,bactrim","C10H11N3O3S","253.28 Da","Sulfonamide","90–100","Vd ≈ 0.2 L/kg; 70% protein-bound","Liver acetylation","10","renal","Rash (rarely severe); allergy","ok","Low","Pass"],
+["Clindamycin","dalacin,cleocin","C18H33ClN2O5S","424.98 Da","Lincosamide","90","Vd ≈ 1 L/kg; 90% protein-bound","CYP3A4","2–3","bile and renal","C. difficile colitis","ok","Moderate (as HCl)","Pass"],
+["Linezolid","linospan,zyvox","C16H20FN3O4","337.35 Da","Oxazolidinone","100","Vd ≈ 0.6 L/kg; 31% protein-bound","Oxidation (not CYP)","5","renal","Low blood counts with long use; serotonin syndrome risk","ok","Moderate","Pass"],
+["Vancomycin","vanco","C66H75Cl2N9O24","1449.25 Da","Glycopeptide, injection","IV","Vd ≈ 0.7 L/kg; 50% protein-bound","Not metabolised","4–6","renal","Kidney and ear toxicity; infusion reaction","bad","High (as HCl)","Fail (MW > 500)"],
+["Gentamicin","gentamycin,garamycin","C21H43N5O7","477.60 Da","Aminoglycoside, injection","IV","Vd ≈ 0.25 L/kg; low protein binding","Not metabolised","2–3","renal","Kidney and hearing damage; narrow therapeutic range","bad","High","Fail (HBD > 5)"],
+["Rifampicin","rifampin,r-cin,rimactane","C43H58N4O12","822.94 Da","Rifamycin (anti-TB)","90–95","Vd ≈ 1 L/kg; 80% protein-bound","Liver; strongly induces CYP enzymes","3–5","bile and renal","Liver injury; many drug interactions; orange body fluids","bad","Low","Fail (MW > 500)"],
+["Isoniazid","inh,isonex","C6H7N3O","137.14 Da","Anti-TB","90–100","Vd ≈ 0.6 L/kg; low protein binding","Liver acetylation (NAT2)","1–4","renal","Liver injury; nerve damage (give vitamin B6)","bad","High","Pass"]
+];
+const admetLocal = {}, medList = [], abxList = [];
+function mkEntry(r){
+  const [name,alias,formula,mw,cls,F,dist,metab,t,route,tox,toxS,sol,lip] = r;
+  const iv = F === 'IV', fnum = iv ? 0 : parseFloat(F.match(/\d+/)[0]);
+  const absLvl = iv ? 'Poor oral (given by injection)' : fnum>=80 ? 'High' : fnum>=40 ? 'Medium' : 'Low';
+  const absS = iv ? 'bad' : fnum>=80 ? 'good' : fnum>=40 ? 'ok' : 'bad';
+  const tt = /h|day/.test(t) ? t : t + ' h';
+  const tmax = Math.max(...tt.match(/\d+(\.\d+)?/g).map(Number)) * (/day/.test(tt) ? 24 : 1);
+  const tS = tmax<=12 ? 'good' : tmax<=72 ? 'ok' : 'bad';
+  const mS = /induces|inhibits/.test(metab) ? 'bad' : /CYP/.test(metab) ? 'ok' : 'good';
+  const dS = /accumulates|Large Vd/.test(dist) ? 'ok' : 'good';
+  const sS = /^Very low/.test(sol) ? 'bad' : /^Low/.test(sol) ? 'ok' : 'good';
+  const lS = lip.startsWith('Pass') ? 'good' : lip.startsWith('Borderline') ? 'ok' : 'bad';
+  const reason = (lip.match(/\((.*)\)/)||['',''])[1];
+  const summary = `${name} (${cls}). ` +
+    (iv ? 'It is given by injection because oral absorption is poor. ' : `Oral absorption is ${absLvl.toLowerCase()}. `) +
+    `Main concern: ${tox}. ` +
+    (lS==='good' ? "It passes Lipinski's rule of five." : `It breaks Lipinski's rule of five (${reason || 'borderline'}), yet still works as a drug, because the rules are a guide, not a law.`);
+  return {molecule:name, formula:sub(formula), mw, cls, summary, properties:[
+    ['🫀','ABSORPTION',absLvl,absS], ['🩸','DISTRIBUTION',dist,dS], ['⚙️','METABOLISM',metab,mS],
+    ['🚽','EXCRETION',`t½ ≈ ${tt}, ${route}`,tS], ['☠️','TOXICITY',tox,toxS], ['💧','SOLUBILITY',sol,sS],
+    ['🧬','BIOAVAILABILITY', iv ? 'Not an oral drug' : `≈ ${F}%`, absS], ['📏','LIPINSKI Ro5',lip,lS]]};
+}
+function register(rows, list){
+  rows.forEach(r=>{
+    const e = mkEntry(r); list.push(r[0]);
+    [r[0], ...r[1].split(',')].map(s=>s.trim().toLowerCase()).filter(Boolean).forEach(k=>admetLocal[k]=e);
+  });
+}
+register(medRows, medList); register(abxRows, abxList);
+function findLocal(q){
+  const k = q.trim().toLowerCase();
+  if(admetLocal[k]) return admetLocal[k];
+  if(k.length>=3){ const m = Object.keys(admetLocal).find(n=>n.startsWith(k)); if(m) return admetLocal[m]; }
+  return null;
+}
+(function buildLibrary(){
+  const dl = document.createElement('datalist'); dl.id='drug-list';
+  dl.innerHTML = [...medList,...abxList].map(n=>`<option value="${n}">`).join('');
+  document.body.appendChild(dl);
+  const mk = (id,list)=>{ document.getElementById(id).innerHTML = list.slice().sort().map(n=>`<button class="chip" onclick="pickDrug('${n}')">${n}</button>`).join(''); };
+  mk('chips-meds',medList); mk('chips-abx',abxList);
+  document.getElementById('cnt-meds').textContent = medList.length;
+  document.getElementById('cnt-abx').textContent = abxList.length;
+})();
+function pickDrug(n){
+  document.getElementById('admet-input').value = n;
+  document.getElementById('admet-input').scrollIntoView({behavior:'smooth',block:'center'});
+  runADMET();
+}
+
 function renderADMET(p){
   const colorMap = {good:'var(--accent3)',ok:'var(--warn)',bad:'#f87171'};
   document.getElementById('admet-cards').innerHTML = p.properties.map(x=>{
     const [icon,name,value,status] = Array.isArray(x)?x:[x.icon,x.name,x.value,x.status];
     return `<div class="admet-card"><div class="admet-icon">${icon}</div><div class="admet-name">${name}</div><div class="admet-val" style="color:${colorMap[status]||'var(--text)'}">${value}</div></div>`;
   }).join('');
-  document.getElementById('admet-summary').innerHTML = `<b style="color:var(--text)">${p.molecule}</b> &nbsp;·&nbsp; <span style="font-family:var(--mono);color:var(--accent)">${p.formula}</span> &nbsp;·&nbsp; MW: ${p.mw}<br/><br/>${p.summary}`;
+  document.getElementById('admet-summary').innerHTML = `<b style="color:var(--text)">${p.molecule}</b> &nbsp;·&nbsp; <span style="font-family:var(--mono);color:var(--accent)">${p.formula}</span> &nbsp;·&nbsp; MW: ${p.mw}${p.cls?' &nbsp;·&nbsp; '+p.cls:''}<br/><br/>${p.summary}`;
 }
 async function runADMET(){
   const mol = document.getElementById('admet-input').value.trim();
@@ -1059,6 +1194,8 @@ async function runADMET(){
   document.getElementById('admet-result').classList.add('show');
   document.getElementById('admet-cards').innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0">⏳ Analyzing molecule...</div>';
   document.getElementById('admet-summary').textContent = '';
+  const local = findLocal(mol);
+  if(local){ renderADMET(local); btn.disabled=false; btn.innerHTML='🔍 Predict ADMET'; return; }
   let done = false;
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -1074,7 +1211,7 @@ async function runADMET(){
   if(!done){
     const k = mol.toLowerCase();
     if(admetLocal[k]) renderADMET(admetLocal[k]);
-    else document.getElementById('admet-cards').innerHTML='<div style="color:var(--warn);font-size:0.85rem;padding:0.5rem 0">⚠ Offline mode: try Aspirin, Ibuprofen, Caffeine, Metformin or Paracetamol.</div>';
+    else document.getElementById('admet-cards').innerHTML='<div style="color:var(--warn);font-size:0.85rem;padding:0.5rem 0">⚠ Not in the built-in library. Pick a drug from the Drug Library below.</div>';
   }
   btn.disabled=false; btn.innerHTML='🔍 Predict ADMET';
 }
