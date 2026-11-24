@@ -3,21 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>In Silico Drug Design — Molecular Docking, ADMET & AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<title>MOLECULEX — Artificial Intelligence in Drug Discovery</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #050d1a;
-    --surface: #0a1628;
-    --card: #0f1f38;
-    --border: #1a3560;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --accent3: #10b981;
+    --bg: #04201f;
+    --surface: #07302d;
+    --card: #0b3a36;
+    --border: #14574f;
+    --accent: #2dd4bf;
+    --accent2: #fb7185;
+    --accent3: #34d399;
     --warn: #f59e0b;
     --text: #e2e8f0;
-    --muted: #64748b;
+    --muted: #8fb5b0;
     --mono: 'Space Mono', monospace;
+    --serif: 'Fraunces', Georgia, serif;
     --sans: 'Outfit', sans-serif;
   }
 
@@ -39,7 +40,7 @@
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(5,13,26,0.85);
+    background: rgba(4,32,31,0.85);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
@@ -74,8 +75,8 @@
   }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.25);
+    background: rgba(45,212,191,0.08);
+    border: 1px solid rgba(45,212,191,0.25);
     border-radius: 999px;
     padding: 0.35rem 1rem;
     font-family: var(--mono);
@@ -320,8 +321,8 @@
     font-size: 0.9rem;
     font-weight: 700;
   }
-  .msg-avatar.user { background: rgba(124,58,237,0.25); color: var(--accent2); border: 1px solid rgba(124,58,237,0.3); }
-  .msg-avatar.ai   { background: rgba(0,212,255,0.15); color: var(--accent); border: 1px solid rgba(0,212,255,0.25); }
+  .msg-avatar.user { background: rgba(251,113,133,0.25); color: var(--accent2); border: 1px solid rgba(251,113,133,0.3); }
+  .msg-avatar.ai   { background: rgba(45,212,191,0.15); color: var(--accent); border: 1px solid rgba(45,212,191,0.25); }
   .msg-bubble {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -332,7 +333,7 @@
     max-width: 85%;
     white-space: pre-wrap;
   }
-  .msg-bubble.ai-bubble { border-color: rgba(0,212,255,0.2); }
+  .msg-bubble.ai-bubble { border-color: rgba(45,212,191,0.2); }
 
   .chat-input-row {
     display: flex; gap: 0.7rem;
@@ -452,179 +453,262 @@
   /* range value display */
   .range-row { display: flex; align-items: center; gap: 0.8rem; }
   .range-val { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); min-width: 40px; text-align: right; }
+
+  .hero h1, .section-title { font-family: var(--serif); font-weight: 700; }
+  .btn-purple { color:#04201f; }
+  .nav-links { gap: 1.1rem; }
+  @media(max-width:1000px){ .nav-links{display:none;} }
+  .team-row { margin-top:1.2rem; font-family:var(--mono); font-size:0.72rem; color:var(--muted); line-height:1.8; animation: fadeUp 0.6s 0.4s ease both; }
+  .big-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; margin-bottom:1.5rem; }
+  .big-num { font-family:var(--serif); font-size:3.2rem; font-weight:700; line-height:1; }
+  .big-num.teal{color:var(--accent);} .big-num.rose{color:var(--accent2);}
+  .big-cap { color:var(--muted); font-size:0.85rem; margin-top:0.4rem; }
+  .src { font-family:var(--mono); font-size:0.65rem; color:var(--accent); margin-top:0.8rem; }
+  /* pipeline explorer */
+  .pipe-step { cursor:pointer; }
+  .pipe-step:hover .pipe-icon, .pipe-step.active .pipe-icon { border-color:var(--accent); box-shadow:0 0 0 3px rgba(45,212,191,0.2); }
+  .pipe-step.active .pipe-name { color:var(--accent); }
+  .pipe-detail { margin-top:1.5rem; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.2rem 1.5rem; font-size:0.88rem; line-height:1.7; color:var(--muted); }
+  .pipe-detail b { color:var(--text); }
+  /* architecture */
+  .arch { display:grid; grid-template-columns:1fr; gap:0.8rem; }
+  .layer { display:flex; gap:1rem; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0.9rem 1.2rem; }
+  .layer-tag { flex:0 0 150px; font-family:var(--mono); font-size:0.75rem; font-weight:700; padding:0.5rem 0.7rem; border-radius:8px; text-align:center; color:#04201f; }
+  .layer p { font-size:0.85rem; color:var(--muted); line-height:1.5; }
+  @media(max-width:600px){ .layer{flex-direction:column;align-items:flex-start;} .layer-tag{flex:none;width:100%;} }
+  .loop-note { margin-top:1rem; text-align:center; font-size:0.85rem; color:var(--accent); font-family:var(--mono); }
+  /* charts */
+  .chart-card { margin-bottom:1.5rem; }
+  .chart-card h3 { font-family:var(--serif); font-size:1.25rem; margin-bottom:0.4rem; }
+  .chart-card .cdesc { font-size:0.85rem; color:var(--muted); line-height:1.6; margin-bottom:1.4rem; max-width:760px; }
+  .hbar-label { font-size:0.8rem; font-weight:600; margin:0.9rem 0 0.35rem; display:flex; justify-content:space-between; gap:1rem; }
+  .hbar-label span:last-child { font-family:var(--mono); color:var(--accent); }
+  .hbar-track { background:var(--border); border-radius:8px; height:20px; overflow:hidden; display:flex; }
+  .hbar { height:100%; width:0; transition:width 1.2s ease; }
+  .legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:0.75rem; color:var(--muted); margin-bottom:0.5rem; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:0.4rem; }
+  .vbars { display:flex; align-items:flex-end; justify-content:space-around; height:220px; border-bottom:1px solid var(--border); padding-top:1.5rem; }
+  .vcol { display:flex; flex-direction:column; align-items:center; justify-content:flex-end; width:22%; height:100%; }
+  .vbar { width:100%; border-radius:8px 8px 0 0; height:0; transition:height 1.2s ease; }
+  .vval { font-family:var(--mono); font-weight:700; font-size:0.9rem; margin-bottom:0.4rem; }
+  .vlabels { display:flex; justify-content:space-around; font-size:0.78rem; font-weight:600; margin-top:0.6rem; text-align:center; }
+  .vlabels span { width:22%; }
+  .donut-wrap { display:flex; align-items:center; gap:2rem; flex-wrap:wrap; }
+  .donut { width:150px; height:150px; border-radius:50%; position:relative; flex:none; }
+  .donut::after { content:attr(data-center); position:absolute; inset:24px; background:var(--card); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-weight:700; font-size:0.8rem; text-align:center; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:800px){ .two-col{grid-template-columns:1fr;} }
+  .facts { display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:1rem; }
+  .fact { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:0.6rem 1rem; font-size:0.78rem; color:var(--muted); }
+  .fact b { color:var(--text); font-family:var(--mono); font-size:1rem; display:block; }
+  .lim-list p b { color:var(--text); }
+  .refs { font-size:0.8rem; color:var(--muted); line-height:1.7; padding-left:1.2rem; }
+  .refs li { margin-bottom:0.5rem; }
+  .credit { position:relative; z-index:1; text-align:center; padding:1rem 1rem 3rem; font-family:var(--mono); font-size:0.72rem; color:var(--muted); line-height:1.8; }
+  .credit a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
-
-<!-- background blobs -->
-<div class="glow-blob" style="width:600px;height:600px;background:#00d4ff;top:-100px;left:-150px;"></div>
-<div class="glow-blob" style="width:500px;height:500px;background:#7c3aed;bottom:-100px;right:-100px;"></div>
-
+<div class="glow-blob" style="width:600px;height:600px;background:#2dd4bf;top:-100px;left:-150px;"></div>
+<div class="glow-blob" style="width:500px;height:500px;background:#fb7185;bottom:-100px;right:-100px;"></div>
 <canvas id="starfield"></canvas>
 
 <nav>
-  <span class="nav-logo">// IN SILICO DRUG DESIGN</span>
+  <span class="nav-logo">// MOLECULEX</span>
   <ul class="nav-links">
-    <li><a href="#concepts">Concepts</a></li>
-    <li><a href="#docking">Docking</a></li>
-    <li><a href="#admet">ADMET</a></li>
-    <li><a href="#ai">AI Assistant</a></li>
+    <li><a href="#overview">Overview</a></li>
     <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#evidence">Evidence</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#admet">ADMET</a></li>
+    <li><a href="#ai">Ask AI</a></li>
+    <li><a href="#refs">References</a></li>
   </ul>
 </nav>
 
-<!-- ═══════════ HERO ═══════════ -->
 <div class="hero">
-  <div class="hero-badge">COMPUTATIONAL CHEMISTRY PROJECT</div>
-  <h1>
-    <span>In Silico</span> Drug Design<br/>
-    <em>Molecular Docking,</em> ADMET & AI
-  </h1>
-  <p class="hero-sub">
-    Discover how modern drug discovery happens inside computers — from predicting how molecules bind to proteins, to filtering candidates with AI-powered ADMET analysis.
-  </p>
+  <div class="hero-badge">BIOLOGY FOR ENGINEERS · 25BSBE01 · TEAM 06</div>
+  <h1><span>Artificial Intelligence</span><br/>in <em>Drug Discovery</em></h1>
+  <p class="hero-sub">Applications, techniques and clinical evidence — an interactive prototype of our literature-based review. Explore where AI helps in the drug pipeline and what published studies actually measured.</p>
   <div class="hero-pills">
-    <span class="pill">Molecular Docking</span>
-    <span class="pill">ADMET Prediction</span>
+    <span class="pill">Protein Structure Prediction</span>
     <span class="pill">Virtual Screening</span>
-    <span class="pill">AI / Deep Learning</span>
-    <span class="pill">Structure-Based Design</span>
+    <span class="pill">De Novo Design</span>
+    <span class="pill">Drug Repurposing</span>
+    <span class="pill">Clinical Evidence</span>
   </div>
   <div class="hero-scroll">↓ SCROLL TO EXPLORE</div>
+  <div class="team-row">JAIN (Deemed-to-be) University · B.Tech AIDD · Submitted to Dr. Rohini<br/>Kashish · Sanchita · Kshitij · Debopriya · Prerona · Debraj</div>
   <canvas id="mol-canvas"></canvas>
 </div>
 
-<!-- ═══════════ CONCEPTS ═══════════ -->
-<section id="concepts">
-  <div class="section-label reveal">FUNDAMENTALS</div>
-  <h2 class="section-title reveal">Core Concepts</h2>
-  <p class="section-desc reveal">Before a drug reaches a patient, thousands of molecules are tested virtually. Here's what makes that possible.</p>
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-label reveal">01 · INTRODUCTION</div>
+  <h2 class="section-title reveal">Why Drug Discovery Needs AI</h2>
+  <p class="section-desc reveal">Finding a medicine is slow, costly and risky. AI does not decide which drug is good — it helps experts look at the most promising options first.</p>
+  <div class="big-stats">
+    <div class="card reveal"><div class="big-num teal">$2.6B</div><div class="big-cap">Average cost to develop one new drug</div><div class="src">Deng et al., 2021 [2]</div></div>
+    <div class="card reveal"><div class="big-num rose">10+ yrs</div><div class="big-cap">Typical time from lab to clinic</div><div class="src">Deng et al., 2021 [2]</div></div>
+  </div>
   <div class="card-grid">
-    <div class="card reveal">
-      <div class="concept-icon">🔬</div>
-      <h3>What is In Silico Drug Design?</h3>
-      <p>Using computers to predict, design, and optimize drug candidates before any lab work begins — saving years and billions of dollars in early-stage research.</p>
+    <div class="card reveal"><div class="concept-icon">🧠</div><h3>Pattern Learning</h3><p>Machine learning and deep learning learn patterns from molecular structures, lab assays and patient records, then use them to make predictions.</p></div>
+    <div class="card reveal"><div class="concept-icon">🔍</div><h3>Early Filtering</h3><p>Virtual screening ranks huge libraries of molecules on a computer, so weak candidates are removed before expensive wet-lab tests.</p></div>
+    <div class="card reveal"><div class="concept-icon">🤝</div><h3>Human–AI Synergy</h3><p>Algorithms rank promising options; biologists and clinicians validate safety and effect in the lab and in patients.</p></div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="section-label reveal">02 · PIPELINE OVERVIEW</div>
+  <h2 class="section-title reveal">Where AI Accelerates the Pipeline</h2>
+  <p class="section-desc reveal">Click any stage to see what AI does there and an example from the sources.</p>
+  <div class="card reveal" style="padding:2.5rem;">
+    <div class="pipeline" id="pipeline-steps"></div>
+    <div class="pipe-detail" id="pipe-detail"></div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-label reveal">03 · SYSTEM ARCHITECTURE</div>
+  <h2 class="section-title reveal">Four-Layer AI Discovery Architecture</h2>
+  <p class="section-desc reveal">A conceptual architecture drawn from the reviewed sources [1], [2]. Results from the last layer flow back to the first, so models can be retrained.</p>
+  <div class="card reveal">
+    <div class="arch">
+      <div class="layer"><div class="layer-tag" style="background:#94a3b8">1 · Data Layer</div><p>Raw inputs: chemical libraries, protein sequences and structures, assay results, patient records.</p></div>
+      <div class="layer"><div class="layer-tag" style="background:#2dd4bf">2 · Model Layer</div><p>Algorithms: machine learning, deep neural networks, generative models (e.g. GENTRL), reinforcement learning.</p></div>
+      <div class="layer"><div class="layer-tag" style="background:#34d399">3 · Task Layer</div><p>Applied jobs: target finding, virtual screening, de novo design, synthesis planning, drug repurposing.</p></div>
+      <div class="layer"><div class="layer-tag" style="background:#fb7185">4 · Validation Layer</div><p>Real-world proof: wet-lab experiments, animal studies and human clinical trials.</p></div>
     </div>
-    <div class="card reveal">
-      <div class="concept-icon">🧲</div>
-      <h3>Molecular Docking</h3>
-      <p>A computational method that predicts the preferred orientation of a drug molecule (ligand) when it binds to a protein target. Lower binding energy = stronger interaction.</p>
+    <div class="loop-note">↻ Closed-loop feedback: new results retrain the models</div>
+  </div>
+</section>
+
+<!-- TECHNIQUES -->
+<section id="techniques">
+  <div class="section-label reveal">04 · CORE APPLICATIONS</div>
+  <h2 class="section-title reveal">Key AI Techniques in Modern Pharmacology</h2>
+  <p class="section-desc reveal">The main application areas found in the literature.</p>
+  <div class="card-grid">
+    <div class="card reveal"><div class="concept-icon">🧬</div><h3>Protein Structure Prediction</h3><p>AlphaFold predicts a protein's 3D shape from its amino acid sequence, revealing binding pockets.</p></div>
+    <div class="card reveal"><div class="concept-icon">🔬</div><h3>Virtual Screening</h3><p>Models rank very large libraries (&gt;107 million molecules in one study) so labs test only the top candidates.</p></div>
+    <div class="card reveal"><div class="concept-icon">⚛️</div><h3>De Novo Molecule Design</h3><p>Generative models create brand-new molecules with wanted properties, such as potency and low toxicity.</p></div>
+    <div class="card reveal"><div class="concept-icon">💊</div><h3>Drug Repurposing</h3><p>Finds new uses for existing drugs — e.g. halicin, found as an antibiotic in the Drug Repurposing Hub.</p></div>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section id="evidence">
+  <div class="section-label reveal">05 · EVIDENCE FROM PUBLISHED STUDIES</div>
+  <h2 class="section-title reveal">What the Numbers Say</h2>
+  <p class="section-desc reveal">All values are taken as published (Table 3 of the report). Each study measures something different, so the charts should not be compared with each other as if on one scale.</p>
+
+  <div class="card chart-card reveal" data-chart>
+    <h3>AlphaFold CASP14 Prediction Error <span style="color:var(--muted);font-size:0.8rem;font-family:var(--mono)">(Fig. 10 · lower is better)</span></h3>
+    <p class="cdesc">Median r.m.s.d.95 error in Ångströms. AlphaFold cuts error by more than half versus the best alternative method, and gives pLDDT confidence scores so researchers know which regions to trust [7].</p>
+    <div class="legend"><span><i style="background:var(--accent)"></i>AlphaFold (median)</span><span><i style="background:#94a3b8"></i>Best alternative (median)</span></div>
+    <div class="hbar-label"><span>Backbone accuracy</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="24" style="background:var(--accent)"></div></div><div class="hbar-label"><span></span><span>0.96 Å</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="70" style="background:#94a3b8"></div></div><div class="hbar-label"><span></span><span style="color:#94a3b8">2.80 Å</span></div>
+    <div class="hbar-label"><span>All-atom accuracy</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="37.5" style="background:var(--accent)"></div></div><div class="hbar-label"><span></span><span>1.50 Å</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="87.5" style="background:#94a3b8"></div></div><div class="hbar-label"><span></span><span style="color:#94a3b8">3.50 Å</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card chart-card reveal" data-chart>
+      <h3>DDR1 Kinase Inhibitor Timeline</h3>
+      <p class="cdesc">A deep generative model (GENTRL) designed DDR1 inhibitors in 21 days; 46 days end-to-end. Six inhibitors were designed and four tested compounds were active [5].</p>
+      <div class="vbars">
+        <div class="vcol"><div class="vval" style="color:var(--accent)">21</div><div class="vbar" data-h="45" style="background:var(--accent)"></div></div>
+        <div class="vcol"><div class="vval" style="color:#94a3b8">25</div><div class="vbar" data-h="54" style="background:#94a3b8"></div></div>
+        <div class="vcol"><div class="vval" style="color:var(--accent2)">46</div><div class="vbar" data-h="100" style="background:var(--accent2)"></div></div>
+      </div>
+      <div class="vlabels"><span>AI design (days)</span><span>Synthesis &amp; testing</span><span>Total end-to-end</span></div>
     </div>
-    <div class="card reveal">
-      <div class="concept-icon">⚡</div>
-      <h3>Binding Free Energy</h3>
-      <p>The thermodynamic measure (kcal/mol) of how strongly a drug binds. Calculated from electrostatic, van der Waals, and hydrogen-bond interactions at the active site.</p>
+
+    <div class="card chart-card reveal" data-chart>
+      <h3>Antibiotic Discovery Funnel</h3>
+      <p class="cdesc">Stokes et al. trained a neural network on 2,335 molecules, screened &gt;107 million, and lab-tested 23 predictions; 8 were antibacterial [6].</p>
+      <div class="donut-wrap">
+        <div class="donut" id="donut1" data-center="8 / 23"></div>
+        <div style="font-size:0.85rem;line-height:2;">
+          <div><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent);margin-right:0.5rem"></i><b>Antibacterial: 8</b> (35%)</div>
+          <div><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--border);margin-right:0.5rem"></i>Not antibacterial: 15 (65%)</div>
+        </div>
+      </div>
+      <div class="facts"><div class="fact"><b>2,335</b>training</div><div class="fact"><b>&gt;107M</b>screened</div><div class="fact"><b>23</b>lab tested</div></div>
     </div>
-    <div class="card reveal">
-      <div class="concept-icon">🧪</div>
-      <h3>ADMET Properties</h3>
-      <p><b>A</b>bsorption · <b>D</b>istribution · <b>M</b>etabolism · <b>E</b>xcretion · <b>T</b>oxicity — five critical filters every drug candidate must pass before clinical trials.</p>
-    </div>
-    <div class="card reveal">
-      <div class="concept-icon">🤖</div>
-      <h3>AI & Machine Learning</h3>
-      <p>Deep learning models (GNNs, Transformers) trained on millions of known drug–target interactions can predict binding affinity and ADMET profiles in milliseconds.</p>
-    </div>
-    <div class="card reveal">
-      <div class="concept-icon">💊</div>
-      <h3>Lipinski's Rule of Five</h3>
-      <p>A drug-likeness filter: MW ≤ 500 Da, logP ≤ 5, H-bond donors ≤ 5, H-bond acceptors ≤ 10. Molecules that violate ≥ 2 rules often have poor oral bioavailability.</p>
+  </div>
+
+  <div class="card chart-card reveal" data-chart>
+    <h3>Clinical Trial Success: AI vs. Industry Average <span style="color:var(--muted);font-size:0.8rem;font-family:var(--mono)">(Figs. 5 &amp; 6)</span></h3>
+    <p class="cdesc">AI-discovered molecules reach 80–90% success in Phase I safety trials (historic industry range about 40–65%), but about 40% in Phase II efficacy trials on a limited sample — similar to historic averages [8].</p>
+    <div class="hbar-label"><span>Phase I — AI-discovered</span><span>80–90%</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="80" style="background:var(--accent)"></div><div class="hbar" data-w="10" style="background:var(--accent2)"></div></div>
+    <div class="hbar-label"><span style="color:var(--muted)">Phase I — historic industry average</span><span style="color:#94a3b8">about 40–65%</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="40" style="background:#64748b"></div><div class="hbar" data-w="25" style="background:#94a3b8"></div></div>
+    <div class="hbar-label"><span>Phase II — AI-discovered (limited sample)</span><span>about 40%</span></div>
+    <div class="hbar-track"><div class="hbar" data-w="40" style="background:#0f766e"></div></div>
+    <p class="src">Bars show the lower end of each range, then the extra up to the upper end.</p>
+  </div>
+
+  <div class="card chart-card reveal" data-chart>
+    <h3>AI-Discovered Drugs in Clinical Development <span style="color:var(--muted);font-size:0.8rem;font-family:var(--mono)">(Fig. 7)</span></h3>
+    <p class="cdesc">Still a small group: 67 of 6,147 drugs in clinical development (about 1%) were AI-discovered molecules; 24 (0.4%) have AI-discovered targets [8].</p>
+    <div class="donut-wrap">
+      <div class="donut" id="donut2" data-center="67 / 6,147"></div>
+      <div style="font-size:0.85rem;line-height:2;">
+        <div><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent2);margin-right:0.5rem"></i><b>AI-discovered: 67</b> (~1.1%)</div>
+        <div><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--border);margin-right:0.5rem"></i>All other molecules: 6,080</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ DOCKING SIMULATOR ═══════════ -->
-<section id="docking">
-  <div class="section-label reveal">INTERACTIVE TOOL</div>
-  <h2 class="section-title reveal">Molecular Docking Simulator</h2>
-  <p class="section-desc reveal">Select a drug candidate and protein target. The simulator estimates binding affinity, interaction pose, and druglikeness score.</p>
-
+<!-- DEMO -->
+<section id="demo">
+  <div class="section-label reveal">06 · INTERACTIVE DEMO</div>
+  <h2 class="section-title reveal">Virtual Screening Demo</h2>
+  <p class="section-desc reveal">A simplified, simulated example of step 3 of the workflow: a model scores how well a drug (ligand) fits a protein target, so scientists test the best ones first. Values are illustrative, not real docking output.</p>
   <div class="tool-wrapper reveal">
-    <div class="tool-header">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-      <span style="margin-left:0.5rem;">docking_simulator.py — AutoDock Vina (simulated)</span>
-    </div>
+    <div class="tool-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:0.5rem;">virtual_screening_demo.py — simulated</span></div>
     <div class="tool-body">
       <div class="form-row">
-        <div>
-          <label>DRUG CANDIDATE (LIGAND)</label>
+        <div><label>DRUG CANDIDATE (LIGAND)</label>
           <select id="ligand-select">
-            <option value="aspirin">Aspirin (C₉H₈O₄)</option>
-            <option value="ibuprofen">Ibuprofen (C₁₃H₁₈O₂)</option>
-            <option value="caffeine">Caffeine (C₈H₁₀N₄O₂)</option>
-            <option value="oseltamivir">Oseltamivir (Tamiflu)</option>
-            <option value="remdesivir">Remdesivir</option>
-            <option value="lopinavir">Lopinavir (HIV protease inhibitor)</option>
-            <option value="metformin">Metformin</option>
-          </select>
-        </div>
-        <div>
-          <label>TARGET PROTEIN (RECEPTOR)</label>
+            <option value="aspirin">Aspirin (C₉H₈O₄)</option><option value="ibuprofen">Ibuprofen (C₁₃H₁₈O₂)</option><option value="caffeine">Caffeine (C₈H₁₀N₄O₂)</option><option value="oseltamivir">Oseltamivir (Tamiflu)</option><option value="remdesivir">Remdesivir</option><option value="lopinavir">Lopinavir (HIV protease inhibitor)</option><option value="metformin">Metformin</option>
+          </select></div>
+        <div><label>TARGET PROTEIN (RECEPTOR)</label>
           <select id="receptor-select">
-            <option value="cox2">COX-2 (Cyclooxygenase-2)</option>
-            <option value="ace2">ACE2 (SARS-CoV-2 receptor)</option>
-            <option value="hivp">HIV-1 Protease</option>
-            <option value="egfr">EGFR (Lung cancer)</option>
-            <option value="ada2">Adenosine A2A Receptor</option>
-            <option value="dpp4">DPP-4 (Diabetes target)</option>
-          </select>
-        </div>
+            <option value="cox2">COX-2 (Cyclooxygenase-2)</option><option value="ace2">ACE2 (SARS-CoV-2 receptor)</option><option value="hivp">HIV-1 Protease</option><option value="egfr">EGFR (Lung cancer)</option><option value="ada2">Adenosine A2A Receptor</option><option value="dpp4">DPP-4 (Diabetes target)</option>
+          </select></div>
       </div>
-
       <div class="form-row">
-        <div>
-          <label>GRID BOX SIZE (Å)</label>
-          <div class="range-row">
-            <input type="range" id="grid-size" min="10" max="30" value="20" oninput="document.getElementById('gv').textContent=this.value+'Å'"/>
-            <span class="range-val" id="gv">20Å</span>
-          </div>
-        </div>
-        <div>
-          <label>EXHAUSTIVENESS</label>
-          <div class="range-row">
-            <input type="range" id="exhaust" min="1" max="16" value="8" oninput="document.getElementById('ev').textContent=this.value"/>
-            <span class="range-val" id="ev">8</span>
-          </div>
-        </div>
+        <div><label>GRID BOX SIZE (Å)</label><div class="range-row"><input type="range" id="grid-size" min="10" max="30" value="20" oninput="document.getElementById('gv').textContent=this.value+'Å'"/><span class="range-val" id="gv">20Å</span></div></div>
+        <div><label>EXHAUSTIVENESS</label><div class="range-row"><input type="range" id="exhaust" min="1" max="16" value="8" oninput="document.getElementById('ev').textContent=this.value"/><span class="range-val" id="ev">8</span></div></div>
       </div>
-
-      <button class="btn" id="dock-btn" onclick="runDocking()">
-        ▶ Run Docking
-      </button>
-
-      <div class="result-panel" id="dock-result">
-        <div class="result-title">// DOCKING RESULTS — AutoDock Vina (simulated)</div>
-        <div id="dock-metrics"></div>
-      </div>
+      <button class="btn" id="dock-btn" onclick="runDocking()">▶ Run Screening</button>
+      <div class="result-panel" id="dock-result"><div class="result-title">// SCREENING RESULTS (simulated)</div><div id="dock-metrics"></div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ ADMET ═══════════ -->
+<!-- ADMET -->
 <section id="admet">
-  <div class="section-label reveal">DRUG FILTERING</div>
+  <div class="section-label reveal">07 · PRECLINICAL PREDICTION</div>
   <h2 class="section-title reveal">ADMET Predictor</h2>
-  <p class="section-desc reveal">Enter a molecule name below and our AI will analyze its Absorption, Distribution, Metabolism, Excretion, and Toxicity profile.</p>
-
+  <p class="section-desc reveal">AI is also used to predict properties before preclinical tests. Enter a drug name to see its Absorption, Distribution, Metabolism, Excretion and Toxicity profile.</p>
   <div class="tool-wrapper reveal">
-    <div class="tool-header">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-      <span style="margin-left:0.5rem;">admet_predictor.py — powered by Claude AI</span>
-    </div>
+    <div class="tool-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:0.5rem;">admet_predictor.py</span></div>
     <div class="tool-body">
-      <div class="warn-box">⚠ AI-generated predictions for educational purposes only. Not for clinical use.</div>
+      <div class="warn-box">⚠ Illustrative predictions for educational purposes only. Not for clinical use.</div>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;align-items:flex-end;">
-        <div style="flex:1;min-width:220px;">
-          <label>MOLECULE / DRUG NAME</label>
-          <input type="text" id="admet-input" placeholder="e.g. Aspirin, Ibuprofen, Caffeine..." onkeydown="if(event.key==='Enter')runADMET()"/>
-        </div>
-        <button class="btn btn-purple" id="admet-btn" onclick="runADMET()">
-          🔍 Predict ADMET
-        </button>
+        <div style="flex:1;min-width:220px;"><label>MOLECULE / DRUG NAME</label>
+          <input type="text" id="admet-input" placeholder="e.g. Aspirin, Ibuprofen, Caffeine, Metformin, Paracetamol" onkeydown="if(event.key==='Enter')runADMET()"/></div>
+        <button class="btn btn-purple" id="admet-btn" onclick="runADMET()">🔍 Predict ADMET</button>
       </div>
       <div id="admet-result" class="result-panel">
         <div class="result-title">// ADMET ANALYSIS</div>
@@ -635,71 +719,68 @@
   </div>
 </section>
 
-<!-- ═══════════ AI ASSISTANT ═══════════ -->
+<!-- AI ASSISTANT -->
 <section id="ai">
-  <div class="section-label reveal">AI INTEGRATION</div>
-  <h2 class="section-title reveal">Drug Design AI Assistant</h2>
-  <p class="section-desc reveal">Ask anything about computational drug design — molecular docking, force fields, SMILES notation, or specific drugs. Powered by Claude.</p>
-
+  <div class="section-label reveal">08 · ASK THE ASSISTANT</div>
+  <h2 class="section-title reveal">AI in Drug Discovery Assistant</h2>
+  <p class="section-desc reveal">Ask about AlphaFold, virtual screening, de novo design, clinical success rates or the limits of AI. Answers are based on the sources in our report.</p>
   <div class="chat-wrap reveal">
     <div class="chat-messages" id="chat-messages">
-      <div class="msg">
-        <div class="msg-avatar ai">AI</div>
-        <div class="msg-bubble ai-bubble">
-          Hello! 👋 I'm your computational drug design assistant. I can help you understand:
-          • Molecular docking protocols &amp; scoring functions
-          • ADMET property prediction
-          • Virtual screening workflows
-          • AI/ML in drug discovery (GNNs, Transformers, AlphaFold)
-          • Lipinski's Rule of Five &amp; drug-likeness filters
-          
-          What would you like to explore?
-        </div>
-      </div>
+      <div class="msg"><div class="msg-avatar ai">AI</div><div class="msg-bubble ai-bubble">Hello! 👋 I can explain how AI is used in drug discovery:
+• Where AI fits in the pipeline
+• AlphaFold, virtual screening, de novo design
+• Clinical trial success rates (Phase I vs Phase II)
+• Limitations such as biased data
+What would you like to explore?</div></div>
     </div>
     <div class="chat-input-row">
-      <textarea class="chat-input" id="chat-input" rows="1" placeholder="Ask about drug design, docking, ADMET..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <textarea class="chat-input" id="chat-input" rows="1" placeholder="Ask about AI in drug discovery..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
       <button class="btn" id="chat-btn" onclick="sendChat()">Send →</button>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ PIPELINE ═══════════ -->
-<section id="pipeline">
-  <div class="section-label reveal">WORKFLOW</div>
-  <h2 class="section-title reveal">Drug Discovery Pipeline</h2>
-  <p class="section-desc reveal">From target identification to lead optimization — the modern computational drug discovery workflow.</p>
-
-  <div class="card reveal" style="padding:2.5rem;">
-    <div class="pipeline" id="pipeline-steps">
-      <!-- filled by JS -->
-    </div>
+<!-- LIMITATIONS -->
+<section id="limits">
+  <div class="section-label reveal">09 · CRITICAL EVALUATION</div>
+  <h2 class="section-title reveal">Limitations &amp; Future Priorities</h2>
+  <div class="two-col" style="margin-top:2rem;">
+    <div class="card reveal lim-list"><h3 style="color:var(--accent2)">Key Challenges</h3><br/>
+      <p><b>Data &amp; human bias:</b> narrow training sets reduce generalisation to novel targets [4].</p><br/>
+      <p><b>Phase II bottleneck:</b> models cannot yet fully simulate complex human physiology.</p><br/>
+      <p><b>Review scope:</b> literature synthesis of 8 sources; Phase II sample is limited; no new experiments or user studies.</p></div>
+    <div class="card reveal lim-list"><h3 style="color:var(--accent)">Future Roadmap</h3><br/>
+      <p><b>Explainable AI:</b> confidence scores (like AlphaFold's pLDDT) build scientist trust.</p><br/>
+      <p><b>Broader datasets:</b> diverse, less biased data and larger Phase II/III studies.</p><br/>
+      <p><b>Interdisciplinary teams:</b> engineers, biologists and chemists working together.</p></div>
   </div>
-
-  <div class="card-grid" style="margin-top:2rem;">
-    <div class="card reveal">
-      <h3>🎯 Traditional Drug Discovery</h3>
-      <p>Takes 10–15 years and $2+ billion per drug. High failure rate (>90% of candidates fail in clinical trials).</p>
-    </div>
-    <div class="card reveal">
-      <h3>⚡ In Silico Acceleration</h3>
-      <p>Computational methods screen millions of virtual compounds in days, reducing wet-lab experiments by 60–80% in early stages.</p>
-    </div>
-    <div class="card reveal">
-      <h3>🤖 AI Revolution (2020s)</h3>
-      <p>Models like AlphaFold2 solved the protein folding problem. Graph Neural Networks predict binding with near-experimental accuracy.</p>
-    </div>
+  <div class="card reveal" style="margin-top:1.5rem;text-align:center;padding:2.2rem;">
+    <h3 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:0.8rem;">AI accelerates early discovery, while wet labs confirm human safety</h3>
+    <p style="max-width:720px;margin:0 auto;">Published studies show AI cutting molecular design to 21 days, predicting protein folds within 0.96 Å and reaching 80–90% Phase I success — yet Phase II efficacy (~40%) and data bias show that computational models must partner with laboratory and clinical validation.</p>
   </div>
 </section>
 
-<p class="credit">
-  Built by 
-  <a href="https://github.com/kshitijkumar-dev" target="_blank">
-    Kshitij Kumar
-  </a>
-</p>
-<script>
-// ═══════════════════════════════════════
+<!-- REFERENCES -->
+<section id="refs">
+  <div class="section-label reveal">REFERENCES</div>
+  <h2 class="section-title reveal">Sources</h2>
+  <div class="card reveal">
+    <ol class="refs">
+      <li>D. Paul et al., "Artificial intelligence in drug discovery and development," <i>Drug Discovery Today</i>, 26(1), 80–93, 2020.</li>
+      <li>J. Deng et al., "Artificial intelligence in drug discovery: applications and techniques," arXiv:2106.05386, 2021.</li>
+      <li>J. Vamathevan et al., "Applications of machine learning in drug discovery and development," <i>Nat. Rev. Drug Discov.</i>, 18, 463–477, 2019.</li>
+      <li>G. Ghislat et al., "Data-centric challenges with the application and adoption of AI for drug discovery," arXiv:2407.05150, 2024.</li>
+      <li>A. Zhavoronkov et al., "Deep learning enables rapid identification of potent DDR1 kinase inhibitors," <i>Nat. Biotechnol.</i>, 37, 1038–1040, 2019.</li>
+      <li>J. M. Stokes et al., "A deep learning approach to antibiotic discovery," <i>Cell</i>, 180(4), 688–702, 2020.</li>
+      <li>J. Jumper et al., "Highly accurate protein structure prediction with AlphaFold," <i>Nature</i>, 596, 583–589, 2021.</li>
+      <li>M. K. Jayatunga et al., "How successful are AI-discovered drugs in clinical trials?" <i>Drug Discovery Today</i>, 29(6), 104009, 2024.</li>
+    </ol>
+  </div>
+</section>
+
+<p class="credit">Biology for Engineers (25BSBE01) · Team 06 · JAIN (Deemed-to-be) University<br/>Prototype of the literature review "AI in Drug Discovery" · Built by <a href="https://github.com/kshitijkumar-dev" target="_blank">Kshitij Kumar</a></p>
+
+<script>// ═══════════════════════════════════════
 // STARFIELD
 // ═══════════════════════════════════════
 (function(){
@@ -833,36 +914,45 @@ const observer = new IntersectionObserver(entries=>{
 },{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-// ═══════════════════════════════════════
-// PIPELINE STEPS
-// ═══════════════════════════════════════
+
+// ═══ chart animation ═══
+const chartObs = new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.querySelectorAll('.hbar').forEach(b=>b.style.width=b.dataset.w+'%');
+    e.target.querySelectorAll('.vbar').forEach(b=>b.style.height=b.dataset.h+'%');
+    chartObs.unobserve(e.target);
+  });
+},{threshold:0.3});
+document.querySelectorAll('[data-chart]').forEach(el=>chartObs.observe(el));
+document.getElementById('donut1').style.background='conic-gradient(var(--accent) 0 '+(8/23*100)+'%, var(--border) 0)';
+document.getElementById('donut2').style.background='conic-gradient(var(--accent2) 0 '+(67/6147*100)+'%, var(--border) 0)';
+
+// ═══ pipeline explorer ═══
 const steps = [
-  {icon:'🎯',bg:'rgba(239,68,68,0.15)',name:'Target\nIdentification'},
-  {icon:'🗃️',bg:'rgba(245,158,11,0.15)',name:'Library\nPreparation'},
-  {icon:'🔍',bg:'rgba(16,185,129,0.15)',name:'Virtual\nScreening'},
-  {icon:'🧲',bg:'rgba(0,212,255,0.15)',name:'Molecular\nDocking'},
-  {icon:'📊',bg:'rgba(124,58,237,0.15)',name:'ADMET\nFiltering'},
-  {icon:'⚗️',bg:'rgba(239,68,68,0.15)',name:'Lead\nOptimization'},
-  {icon:'🧬',bg:'rgba(245,158,11,0.15)',name:'Preclinical\nTests'},
-  {icon:'💊',bg:'rgba(16,185,129,0.15)',name:'Clinical\nTrials'},
+  {icon:'🎯',bg:'rgba(251,113,133,0.15)',name:'Target\nIdentification',what:'AI mines biological data to find disease targets (often proteins).',ex:'AlphaFold predicts target 3D shapes from sequence, median backbone error 0.96 Å in CASP14 [7].'},
+  {icon:'🔍',bg:'rgba(52,211,153,0.15)',name:'Hit Finding\n(Screening)',what:'Models rank very large molecule libraries so only the best are tested in the lab.',ex:'A model screened more than 107 million molecules; 23 predictions were tested and 8 were antibacterial [6].'},
+  {icon:'⚛️',bg:'rgba(45,212,191,0.15)',name:'Lead Design\n(De Novo)',what:'Generative models create new molecules from scratch with wanted properties.',ex:'GENTRL designed DDR1 inhibitors in 21 days; 46 days from design to validation [5].'},
+  {icon:'⚗️',bg:'rgba(245,158,11,0.15)',name:'Synthesis\nPlanning',what:'Retrosynthesis works backwards to suggest how a molecule can be made.',ex:'Listed with virtual screening and de novo design as a popular AI use [2].'},
+  {icon:'🧪',bg:'rgba(251,113,133,0.15)',name:'Preclinical\nTests',what:'AI predicts properties such as toxicity and binding before animal and lab studies.',ex:'Most chances to save time and cost lie in early discovery and preclinical stages [4].'},
+  {icon:'💊',bg:'rgba(52,211,153,0.15)',name:'Clinical\nTrials',what:'AI can help plan trials, and AI-discovered molecules are now entering them.',ex:'80–90% Phase I success for AI-discovered molecules, ~40% in Phase II (limited sample) [8].'},
 ];
 const pw = document.getElementById('pipeline-steps');
+function showStep(i){
+  document.querySelectorAll('.pipe-step').forEach((s,k)=>s.classList.toggle('active',k===i));
+  const s = steps[i];
+  document.getElementById('pipe-detail').innerHTML = `<b>${i+1}. ${s.name.replace('\n',' ')}</b><br/><b>What AI does:</b> ${s.what}<br/><b>Example:</b> ${s.ex}`;
+}
 steps.forEach((s,i)=>{
   const el = document.createElement('div');
   el.className='pipe-step';
-  el.innerHTML=`<div class="pipe-icon" style="background:${s.bg}">${s.icon}</div><div class="pipe-name">${s.name}</div>`;
+  el.onclick=()=>showStep(i);
+  el.innerHTML=`<div class="pipe-icon" style="background:${s.bg}">${s.icon}</div><div class="pipe-name">${s.name.replace('\n','<br/>')}</div>`;
   pw.appendChild(el);
-  if(i<steps.length-1){
-    const arr=document.createElement('div');
-    arr.className='pipe-connector';
-    arr.textContent='→';
-    pw.appendChild(arr);
-  }
+  if(i<steps.length-1){ const a=document.createElement('div'); a.className='pipe-connector'; a.textContent='→'; pw.appendChild(a); }
 });
+showStep(0);
 
-// ═══════════════════════════════════════
-// DOCKING SIMULATOR
-// ═══════════════════════════════════════
 const dockingData = {
   aspirin:   { cox2:{score:-7.2,hb:3,vdw:-18.4,elec:-3.1,lip:true},  ace2:{score:-4.1,hb:1,vdw:-10.2,elec:-1.8,lip:true},  hivp:{score:-3.8,hb:0,vdw:-9.1,elec:-1.2,lip:true},  egfr:{score:-4.5,hb:2,vdw:-11.3,elec:-2.0,lip:true},  ada2:{score:-5.1,hb:2,vdw:-13.0,elec:-2.5,lip:true},  dpp4:{score:-5.5,hb:2,vdw:-14.2,elec:-2.7,lip:true} },
   ibuprofen: { cox2:{score:-8.1,hb:1,vdw:-22.1,elec:-2.3,lip:true},  ace2:{score:-5.2,hb:1,vdw:-14.1,elec:-1.5,lip:true},  hivp:{score:-4.9,hb:1,vdw:-12.8,elec:-1.1,lip:true},  egfr:{score:-5.6,hb:1,vdw:-15.0,elec:-1.9,lip:true},  ada2:{score:-6.2,hb:2,vdw:-16.5,elec:-2.0,lip:true},  dpp4:{score:-6.8,hb:2,vdw:-18.3,elec:-2.2,lip:true} },
@@ -900,7 +990,7 @@ function runDocking(){
 
     document.getElementById('dock-metrics').innerHTML = `
       <div class="metric-row">
-        <span class="metric-label">Binding Free Energy (ΔG)</span>
+        <span class="metric-label">Predicted Binding Energy (ΔG)</span>
         <span class="metric-value ${sc}">${d.score} kcal/mol — ${scoreLabel(d.score)}</span>
       </div>
       <div class="score-bar-wrap">
@@ -926,7 +1016,7 @@ function runDocking(){
       </div>
       <div style="margin-top:1rem;padding:0.8rem 1rem;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:8px;font-size:0.8rem;color:var(--muted);line-height:1.6;">
         <b style="color:var(--text)">Interpretation:</b> A ΔG of <b>${d.score} kcal/mol</b> indicates 
-        ${d.score<=-8?'strong, promising binding — worth advancing to ADMET analysis.':d.score<=-5.5?'moderate binding — may be optimized with structural modifications.':'weak binding — this molecule is unlikely to inhibit this target effectively.'}
+        ${d.score<=-8?'strong, promising binding — worth advancing to ADMET analysis and lab testing.':d.score<=-5.5?'moderate binding — may be optimized with structural modifications.':'weak binding — this molecule is unlikely to inhibit this target effectively.'}
       </div>
     `;
 
@@ -939,147 +1029,110 @@ function runDocking(){
     },100);
 
     btn.disabled = false;
-    btn.innerHTML = '▶ Run Docking';
+    btn.innerHTML = '▶ Run Screening';
   }, 1400);
 }
 
-// ═══════════════════════════════════════
-// ADMET via Claude API
-// ═══════════════════════════════════════
+
+// ═══ ADMET (live AI if available, built-in examples otherwise) ═══
+const admetLocal = {
+  aspirin:{molecule:'Aspirin',formula:'C₉H₈O₄',mw:'180.16 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.15 L/kg','good'],['⚙️','METABOLISM','Hydrolysed to salicylate; CYP2C9','ok'],['🚽','EXCRETION','t½ ≈ 2–3 h, renal','good'],['☠️','TOXICITY','Low at normal dose; GI irritation','ok'],['💧','SOLUBILITY','≈ 3 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 68%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Small, well-absorbed and rapidly cleared. Main weakness is stomach irritation, so it passes drug-likeness filters but still shows a side-effect trade-off.'},
+  ibuprofen:{molecule:'Ibuprofen',formula:'C₁₃H₁₈O₂',mw:'206.28 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.12 L/kg; highly protein-bound','ok'],['⚙️','METABOLISM','CYP2C9 substrate','ok'],['🚽','EXCRETION','t½ ≈ 2 h, renal','good'],['☠️','TOXICITY','Low; GI and kidney risk at high dose','ok'],['💧','SOLUBILITY','Low (≈ 21 mg/L)','ok'],['🧬','BIOAVAILABILITY','≈ 80–100%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Excellent oral absorption and a short half-life. Low water solubility is the main drawback; it passes all Lipinski rules.'},
+  caffeine:{molecule:'Caffeine',formula:'C₈H₁₀N₄O₂',mw:'194.19 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Crosses blood–brain barrier','ok'],['⚙️','METABOLISM','CYP1A2 substrate','good'],['🚽','EXCRETION','t½ ≈ 5 h, renal','good'],['☠️','TOXICITY','Low; stimulant effects at high dose','ok'],['💧','SOLUBILITY','≈ 21 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 100%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Almost fully absorbed and passes into the brain, which explains its stimulant action. Strong drug-like profile.'},
+  metformin:{molecule:'Metformin',formula:'C₄H₁₁N₅',mw:'129.16 Da',properties:[['🫀','ABSORPTION','Medium','ok'],['🩸','DISTRIBUTION','Vd ≈ 3 L/kg; not protein-bound','good'],['⚙️','METABOLISM','Not metabolised','good'],['🚽','EXCRETION','t½ ≈ 6 h, unchanged in urine','good'],['☠️','TOXICITY','Low; rare lactic acidosis','ok'],['💧','SOLUBILITY','Very high','good'],['🧬','BIOAVAILABILITY','≈ 50–60%','ok'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Very soluble and excreted unchanged, so few drug interactions. Moderate absorption; a rare serious risk (lactic acidosis) is monitored in kidney disease.'},
+  paracetamol:{molecule:'Paracetamol (Acetaminophen)',formula:'C₈H₉NO₂',mw:'151.16 Da',properties:[['🫀','ABSORPTION','High','good'],['🩸','DISTRIBUTION','Vd ≈ 0.9 L/kg','good'],['⚙️','METABOLISM','Liver (glucuronidation; CYP2E1)','ok'],['🚽','EXCRETION','t½ ≈ 2 h, renal','good'],['☠️','TOXICITY','Liver injury in overdose','bad'],['💧','SOLUBILITY','≈ 14 mg/mL','good'],['🧬','BIOAVAILABILITY','≈ 85%','good'],['📏','LIPINSKI Ro5','Pass','good']],summary:'Well absorbed and cleared, but overdose can overload liver metabolism and cause liver damage — a good example of a toxicity filter.'}
+};
+admetLocal.acetaminophen = admetLocal.paracetamol;
+function renderADMET(p){
+  const colorMap = {good:'var(--accent3)',ok:'var(--warn)',bad:'#f87171'};
+  document.getElementById('admet-cards').innerHTML = p.properties.map(x=>{
+    const [icon,name,value,status] = Array.isArray(x)?x:[x.icon,x.name,x.value,x.status];
+    return `<div class="admet-card"><div class="admet-icon">${icon}</div><div class="admet-name">${name}</div><div class="admet-val" style="color:${colorMap[status]||'var(--text)'}">${value}</div></div>`;
+  }).join('');
+  document.getElementById('admet-summary').innerHTML = `<b style="color:var(--text)">${p.molecule}</b> &nbsp;·&nbsp; <span style="font-family:var(--mono);color:var(--accent)">${p.formula}</span> &nbsp;·&nbsp; MW: ${p.mw}<br/><br/>${p.summary}`;
+}
 async function runADMET(){
   const mol = document.getElementById('admet-input').value.trim();
   if(!mol) return;
   const btn = document.getElementById('admet-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Predicting...';
-
-  const result = document.getElementById('admet-result');
-  result.classList.add('show');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Predicting...';
+  document.getElementById('admet-result').classList.add('show');
   document.getElementById('admet-cards').innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0">⏳ Analyzing molecule...</div>';
   document.getElementById('admet-summary').textContent = '';
-
+  let done = false;
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system: `You are a computational chemistry ADMET prediction engine. 
-When given a molecule name, respond ONLY with a valid JSON object (no markdown, no backticks, no extra text).
-Format:
-{
-  "found": true,
-  "molecule": "full name",
-  "formula": "molecular formula",
-  "mw": "molecular weight in Da",
-  "properties": [
-    {"icon":"🫀","name":"ABSORPTION","value":"High/Medium/Low","status":"good/ok/bad"},
-    {"icon":"🩸","name":"DISTRIBUTION","value":"e.g. Vd=0.15 L/kg","status":"good/ok/bad"},
-    {"icon":"⚙️","name":"METABOLISM","value":"e.g. CYP2C9 substrate","status":"good/ok/bad"},
-    {"icon":"🚽","name":"EXCRETION","value":"e.g. t½=2.5h, renal","status":"good/ok/bad"},
-    {"icon":"☠️","name":"TOXICITY","value":"e.g. Low (LD50>2000)","status":"good/ok/bad"},
-    {"icon":"💧","name":"SOLUBILITY","value":"e.g. 3.2 mg/mL","status":"good/ok/bad"},
-    {"icon":"🧬","name":"BIOAVAILABILITY","value":"e.g. ~68%","status":"good/ok/bad"},
-    {"icon":"📏","name":"LIPINSKI Ro5","value":"Pass/Fail","status":"good/bad"}
-  ],
-  "summary": "2-3 sentence drug-likeness summary including key strengths/weaknesses"
-}
-If molecule is unknown, return {"found":false}.`,
-        messages:[{role:'user',content:`ADMET prediction for: ${mol}`}]
-      })
-    });
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-6',max_tokens:1000,
+      system:`You are an ADMET prediction engine for a student project. Respond ONLY with valid JSON (no markdown). Format: {"found":true,"molecule":"name","formula":"formula","mw":"MW in Da","properties":[{"icon":"🫀","name":"ABSORPTION","value":"...","status":"good/ok/bad"},{"icon":"🩸","name":"DISTRIBUTION","value":"...","status":"..."},{"icon":"⚙️","name":"METABOLISM","value":"...","status":"..."},{"icon":"🚽","name":"EXCRETION","value":"...","status":"..."},{"icon":"☠️","name":"TOXICITY","value":"...","status":"..."},{"icon":"💧","name":"SOLUBILITY","value":"...","status":"..."},{"icon":"🧬","name":"BIOAVAILABILITY","value":"...","status":"..."},{"icon":"📏","name":"LIPINSKI Ro5","value":"Pass/Fail","status":"good/bad"}],"summary":"2-3 sentences"} If unknown return {"found":false}.`,
+      messages:[{role:'user',content:`ADMET prediction for: ${mol}`}]})});
     const data = await resp.json();
     const text = data.content.map(i=>i.text||'').join('');
-    let parsed;
-    try { parsed = JSON.parse(text.replace(/```json|```/g,'').trim()); }
-    catch(e){ throw new Error('Parse error'); }
-
-    if(!parsed.found){
-      document.getElementById('admet-cards').innerHTML=`<div style="color:var(--warn);font-size:0.85rem;padding:0.5rem 0">⚠ Molecule not recognized. Try a common drug name like "Aspirin" or "Metformin".</div>`;
-    } else {
-      const colorMap = {good:'var(--accent3)',ok:'var(--warn)',bad:'#f87171'};
-      document.getElementById('admet-cards').innerHTML = parsed.properties.map(p=>`
-        <div class="admet-card">
-          <div class="admet-icon">${p.icon}</div>
-          <div class="admet-name">${p.name}</div>
-          <div class="admet-val" style="color:${colorMap[p.status]||'var(--text)'}">${p.value}</div>
-        </div>`).join('');
-      document.getElementById('admet-summary').innerHTML=`
-        <b style="color:var(--text)">${parsed.molecule}</b> &nbsp;·&nbsp; <span style="font-family:var(--mono);color:var(--accent)">${parsed.formula}</span> &nbsp;·&nbsp; MW: ${parsed.mw}<br/><br/>${parsed.summary}`;
-    }
-  } catch(err){
-    document.getElementById('admet-cards').innerHTML=`<div style="color:#f87171;font-size:0.85rem;">Error contacting AI. Please check your API key setup.</div>`;
+    const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(parsed.found){ renderADMET(parsed); done = true; }
+    else { document.getElementById('admet-cards').innerHTML='<div style="color:var(--warn);font-size:0.85rem;padding:0.5rem 0">⚠ Molecule not recognized. Try a common drug name like "Aspirin" or "Metformin".</div>'; done = true; }
+  } catch(err){}
+  if(!done){
+    const k = mol.toLowerCase();
+    if(admetLocal[k]) renderADMET(admetLocal[k]);
+    else document.getElementById('admet-cards').innerHTML='<div style="color:var(--warn);font-size:0.85rem;padding:0.5rem 0">⚠ Offline mode: try Aspirin, Ibuprofen, Caffeine, Metformin or Paracetamol.</div>';
   }
-  btn.disabled=false;
-  btn.innerHTML='🔍 Predict ADMET';
+  btn.disabled=false; btn.innerHTML='🔍 Predict ADMET';
 }
 
-// ═══════════════════════════════════════
-// AI CHAT
-// ═══════════════════════════════════════
+// ═══ CHAT (live AI if available, report-based answers otherwise) ═══
+const kb = [
+  [/alphafold|protein.*(fold|structure)|plddt|casp/, 'AlphaFold is a neural network that predicts a protein\'s 3D structure from its amino acid sequence. In the CASP14 test its median backbone error was 0.96 Å versus 2.8 Å for the next best method, and it gives pLDDT confidence scores so users know which regions to trust [7].'],
+  [/virtual screening|screen|halicin|antibiotic|107/, 'Virtual screening uses a computer to rank a very large number of molecules. Stokes et al. trained a neural network on 2,335 molecules, applied it to libraries of more than 107 million, and tested 23 predictions in the lab; 8 were antibacterial. Halicin was found in the Drug Repurposing Hub [6].'],
+  [/de novo|generative|gentrl|ddr1|21 days/, 'De novo design means asking a model to create new molecules from scratch. Zhavoronkov et al. used the generative model GENTRL to design DDR1 kinase inhibitors in 21 days, with 46 days from design to validation [5].'],
+  [/phase|clinical|success|trial/, 'Jayatunga et al. report 80–90% Phase I success for AI-discovered molecules (historic industry range about 40–65%), but about 40% in Phase II on a limited sample — similar to historic averages. So early success does not yet clearly continue into efficacy trials [8].'],
+  [/limit|bias|challenge|problem|weak/, 'Main limits: biased or narrow training data, human bias, small Phase II samples, and models that cannot yet fully predict how a drug behaves in the human body. That is why lab and clinical validation are still needed [4], [8].'],
+  [/cost|time|expensive|years|billion/, 'One survey states a new drug costs about $2.6 billion on average and can take more than 10 years, with many candidates failing along the way. Removing weak candidates early with AI can save time and cost [2].'],
+  [/pipeline|stage|workflow|where/, 'The pipeline has six stages: target identification, hit finding (virtual screening), lead design (de novo), synthesis planning, preclinical tests and clinical trials. AI can help at every stage — see the Pipeline section above.'],
+  [/repurpos/, 'Drug repurposing finds new uses for existing drugs. In the antibiotic study, halicin was found as an antibacterial compound in the Drug Repurposing Hub [6].'],
+  [/replace|lab|wet/, 'AI does not replace the laboratory. It helps choose which experiments are worth doing first; predictions must still be checked in lab experiments, animal studies and clinical trials.'],
+  [/adm|toxic/, 'ADMET stands for Absorption, Distribution, Metabolism, Excretion and Toxicity. AI models predict these properties early so weak candidates are removed before preclinical tests — try the ADMET Predictor above.']
+];
+function localAnswer(q){
+  q = q.toLowerCase();
+  for(const [re,ans] of kb) if(re.test(q)) return ans;
+  return 'Good question! I can answer about the pipeline, AlphaFold, virtual screening, de novo design, clinical success rates, costs, ADMET or limitations. Try one of those topics.';
+}
 let chatHistory = [];
-
 function addMsg(role, text){
   const wrap = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className='msg';
+  const div = document.createElement('div'); div.className='msg';
   const isAI = role==='assistant';
-  div.innerHTML=`
-    <div class="msg-avatar ${isAI?'ai':'user'}">${isAI?'AI':'U'}</div>
-    <div class="msg-bubble ${isAI?'ai-bubble':''}">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-  `;
-  wrap.appendChild(div);
-  wrap.scrollTop=wrap.scrollHeight;
-  return div;
+  div.innerHTML=`<div class="msg-avatar ${isAI?'ai':'user'}">${isAI?'AI':'U'}</div><div class="msg-bubble ${isAI?'ai-bubble':''}">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
+  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight; return div;
 }
-
 function addTyping(){
   const wrap = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className='msg'; div.id='typing-indicator';
+  const div = document.createElement('div'); div.className='msg'; div.id='typing-indicator';
   div.innerHTML=`<div class="msg-avatar ai">AI</div><div class="msg-bubble ai-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
-  wrap.appendChild(div);
-  wrap.scrollTop=wrap.scrollHeight;
+  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
 }
-
 async function sendChat(){
   const inp = document.getElementById('chat-input');
-  const text = inp.value.trim();
-  if(!text) return;
+  const text = inp.value.trim(); if(!text) return;
   inp.value=''; inp.style.height='auto';
-  const btn = document.getElementById('chat-btn');
-  btn.disabled=true;
-
-  addMsg('user',text);
-  chatHistory.push({role:'user',content:text});
-  addTyping();
-
+  const btn = document.getElementById('chat-btn'); btn.disabled=true;
+  addMsg('user',text); chatHistory.push({role:'user',content:text}); addTyping();
+  let reply;
   try{
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:`You are an expert computational chemistry and drug design assistant helping a first-year chemistry student learn about in silico drug design. 
-Topics you cover: molecular docking, AutoDock Vina, scoring functions, ADMET prediction, virtual screening, Lipinski's Rule of Five, SMILES notation, protein-ligand interactions, pharmacokinetics, AI/ML in drug discovery, AlphaFold, graph neural networks.
-Keep answers educational, clear, and appropriately detailed for a university student. Use emojis sparingly. Be encouraging.`,
-        messages:chatHistory
-      })
-    });
-    const data=await resp.json();
-    const reply=data.content.map(i=>i.text||'').join('');
-    document.getElementById('typing-indicator')?.remove();
-    addMsg('assistant',reply);
-    chatHistory.push({role:'assistant',content:reply});
-  } catch(err){
-    document.getElementById('typing-indicator')?.remove();
-    addMsg('assistant','Sorry, I encountered an error connecting to the AI. Please try again.');
-  }
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-6',max_tokens:1000,
+      system:`You are an assistant for a first-year B.Tech student project "Artificial Intelligence in Drug Discovery" (Biology for Engineers). Explain in simple, student-friendly language. Cover: AI in the drug pipeline, AlphaFold, virtual screening, de novo design, drug repurposing, clinical trial success rates of AI-discovered molecules, ADMET, and limitations like biased data. Keep answers short.`,
+      messages:chatHistory})});
+    const data = await resp.json();
+    reply = data.content.map(i=>i.text||'').join('');
+    if(!reply) throw new Error('empty');
+  } catch(err){ reply = localAnswer(text); }
+  document.getElementById('typing-indicator')?.remove();
+  addMsg('assistant',reply); chatHistory.push({role:'assistant',content:reply});
   btn.disabled=false;
 }
+
+
 </script>
 </body>
-  
 </html>
